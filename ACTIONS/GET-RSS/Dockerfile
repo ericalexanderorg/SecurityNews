@@ -10,5 +10,6 @@ LABEL "homepage"="https://github.com/ericalexanderorg/SecurityNews/ACTIONS/GET-R
 LABEL "maintainer"="Eric Alexander"
 
 COPY "entrypoint.py" "/entrypoint.py"
+RUN pip install requests
 RUN chmod +x /entrypoint.py
 ENTRYPOINT ["/entrypoint.py"]
