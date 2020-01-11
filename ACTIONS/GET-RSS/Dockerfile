@@ -9,7 +9,5 @@ LABEL "repository"="https://github.com/ericalexanderorg/SecurityNews/ACTIONS/GET
 LABEL "homepage"="https://github.com/ericalexanderorg/SecurityNews/ACTIONS/GET-RSS"
 LABEL "maintainer"="Eric Alexander"
 
-COPY "entrypoint.*" "/"
-RUN pip install -r entrypoint.requirements
-RUN chmod +x /entrypoint.py
-ENTRYPOINT ["/entrypoint.py"]
+# NOTE: Depends on checkout action running before this action
+ENTRYPOINT ["/entrypoint.sh"]
