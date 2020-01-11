@@ -5,6 +5,7 @@ import {
     List,
     Datagrid,
     TextField,
+    DateField
 } from 'react-admin';
 
 const UrlField = ({ record, source, title }) => <a target="_blank" href={record[source]}>{record[title]}</a>;
@@ -16,10 +17,11 @@ const NewsFilter = (props) => (
 );
 
 export const NewsList = props => (
-    <List {...props} bulkActions={false} filters={<NewsFilter />} sort={{ field: 'Date', order: 'ASC' }}>
+    <List {...props} bulkActions={false} filters={<NewsFilter />} sort={{ field: 'Date', order: 'DESC' }} perPage={25}>
         <Datagrid hasBulkActions={false} >
-            <TextField source="Source" />
             <UrlField label="Link" source="URL" title="Title"/>
+            <TextField source="Source" />
+            <DateField source="Date"/>
         </Datagrid>
     </List>
 );

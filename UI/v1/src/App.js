@@ -9,7 +9,8 @@ const dataProvider = fakeDataProvider(data)
 
 const App = () => (  
   <Admin title="Security News" dataProvider={dataProvider}>
-      <Resource name="News" list={NewsList}/>
+      <Resource name="All News" list={NewsList} />
+      <Resource name="Breach News" list={NewsList} />
   </Admin>
 );
 

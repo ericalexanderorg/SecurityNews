@@ -1,0 +1,38 @@
+name: Deploy UI
+
+on:
+    schedule:
+      # Every 2 hours
+      - cron:  '0 */2 * * *'
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Get RSS Data
+      uses: ericalexanderorg/SecurityNews/ACTIONS/GET-RSS@master
+
+    - name: Set Node.js 10.x
+      uses: actions/setup-node@master
+      with:
+        version: 10.x
+    
+    - name: Install dependencies
+      working-directory: ./UI/v1
+      run: |
+        npm install -g yarn
+        yarn install
+
+    - name: Build and Deploy
+      working-directory: ./UI/v1
+      run: yarn build
+
+    - name: Deploy
+      uses: maxheld83/ghpages@v0.2.1
+      if: success()
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }}
+        BUILD_DIR: UI/v1/build/
