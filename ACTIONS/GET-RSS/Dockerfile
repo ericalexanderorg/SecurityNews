@@ -10,4 +10,6 @@ LABEL "homepage"="https://github.com/ericalexanderorg/SecurityNews/ACTIONS/GET-R
 LABEL "maintainer"="Eric Alexander"
 
 # NOTE: Depends on checkout action running before this action
+COPY "entrypoint.sh" "/entrypoint.sh"
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
