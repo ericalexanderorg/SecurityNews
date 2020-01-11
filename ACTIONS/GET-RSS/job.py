@@ -2,7 +2,6 @@
 import requests
 import xmltodict
 from dateutil.parser import parse
-#from datetime import datetime
 import json
 import os
 

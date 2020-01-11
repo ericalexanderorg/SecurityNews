@@ -1,4 +1,3 @@
 requests
 xmltodict
-dateutil
-datetime
+python-dateutil
