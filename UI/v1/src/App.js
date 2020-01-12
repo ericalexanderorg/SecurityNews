@@ -11,6 +11,8 @@ const App = () => (
   <Admin title="Security News" dataProvider={dataProvider}>
       <Resource name="All News" list={NewsList} />
       <Resource name="Breach News" list={NewsList} />
+      <Resource name="Tool News" list={NewsList} />
+      <Resource name="CVE News" list={NewsList} />
   </Admin>
 );
 

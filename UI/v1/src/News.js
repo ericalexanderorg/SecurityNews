@@ -7,6 +7,7 @@ import {
     TextField,
     DateField
 } from 'react-admin';
+import { useMediaQuery } from '@material-ui/core';
 
 const UrlField = ({ record, source, title }) => <a target="_blank" href={record[source]}>{record[title]}</a>;
 
@@ -16,12 +17,21 @@ const NewsFilter = (props) => (
     </Filter>
 );
 
-export const NewsList = props => (
-    <List {...props} bulkActions={false} filters={<NewsFilter />} sort={{ field: 'Date', order: 'DESC' }} perPage={25}>
-        <Datagrid hasBulkActions={false} >
-            <UrlField label="Link" source="URL" title="Title"/>
-            <TextField source="Source" />
-            <DateField source="Date"/>
-        </Datagrid>
-    </List>
-);
+export const NewsList = props => {
+    const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
+    return (
+        <List {...props} bulkActionButtons={false} bulkActions={false} filters={<NewsFilter />} sort={{ field: 'Date', order: 'DESC' }} perPage={25}>
+            {isSmall ? (
+                <Datagrid hasBulkActions={false} >
+                    <UrlField label="Link" source="URL" title="Title"/>
+                </Datagrid>
+            ) : (
+                <Datagrid hasBulkActions={false} >
+                    <UrlField label="Link" source="URL" title="Title"/>
+                    <TextField source="Source" />
+                    <DateField source="Date"/>
+                </Datagrid>
+            )}
+        </List>
+    );
+};
