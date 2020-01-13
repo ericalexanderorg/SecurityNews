@@ -12,7 +12,7 @@ const App = () => (
       <Resource name="All News" list={NewsList} />
       <Resource name="Breach News" list={NewsList} />
       <Resource name="Tool News" list={NewsList} />
-      <Resource name="CVE News" list={NewsList} />
+      <Resource name="Vuln News" list={NewsList} />
   </Admin>
 );
 
