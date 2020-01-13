@@ -39,7 +39,7 @@ def add_reddit_data(current_news, source, url):
 all_news = []
 breach_news = []
 tool_news = []
-cve_news = []
+vuln_news = []
 
 # Run through our news feed sources and add to all news
 all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
@@ -58,7 +58,7 @@ all_news = add_rss_data(all_news, 'OpenSecurity.global', "https://opensecurity.g
 #all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
-cve_news = add_rss_data(cve_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
+vuln_news = add_rss_data(vuln_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
 
 # Pattern match on potential breach news and add to the breach_news list
 patterns = ['ransomware', 'breach', 'exposed', 'cyber attack', 'hacked', 'hackers', 'skimming', 'magecart']
@@ -67,12 +67,19 @@ for item in all_news:
         if pattern in item['Title'].lower():
             breach_news.append(item)
 
+# Pattern match on potential vulnerability news and add to the vuln_news list
+patterns = ['0-day', 'zero-day', 'cve-']
+for item in all_news:
+    for pattern in patterns:
+        if pattern in item['Title'].lower():
+            vuln_news.append(item)
+
 
 out = {
     'All News': all_news, 
     'Breach News': breach_news, 
     'Tool News': tool_news,
-    'CVE News': cve_news
+    'Vuln News': vuln_news
 }
 f = open("../../UI/v1/src/data.json", "w")
 f.write(json.dumps(out))
