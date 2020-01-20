@@ -61,7 +61,7 @@ all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zer
 #all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
-vuln_news = add_rss_data(vuln_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
+#vuln_news = add_rss_data(vuln_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 
