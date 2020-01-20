@@ -81,7 +81,7 @@ all_news = add_rss_data(all_news, 'SecurityWeek', "https://feeds.feedburner.com/
 all_news = add_rss_data(all_news, 'Naked Security', "https://nakedsecurity.sophos.com/feed/")
 all_news = add_rss_data(all_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'Securelist', "https://securelist.com/feed/")
-all_news = add_rss_data(all_news, 'OpenSecurity.global', "https://opensecurity.global/discover/all.xml/")
+#all_news = add_rss_data(all_news, 'OpenSecurity.global', "https://opensecurity.global/discover/all.xml/")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zerodayinitiative.com/blog?format=rss")
