@@ -4,6 +4,34 @@ import xmltodict
 from dateutil.parser import parse
 import json
 import os
+import gzip
+
+def add_cve_data(current_news):
+    # Download gunzipped json file of recent CVEs
+    r = requests.get('https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-recent.json.gz')
+    with open('nvdcve-1.1-recent.json.gz', 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024): 
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
+
+    # gunzip and read json into data variable
+    with gzip.open('nvdcve-1.1-recent.json.gz', 'rb') as f:
+        data = json.loads(f.read())
+
+    # Delete the temp file
+    os.remove('nvdcve-1.1-recent.json.gz')
+
+    # add to dict
+    for cve in data['CVE_Items']:
+        new = {}
+        new['Source'] = 'nist.gov'
+        new['Title'] = cve['cve']['description']['description_data'][0]['value']
+        new['Date'] = '{}'.format(parse(cve['publishedDate']))
+        new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
+        current_news.append(new)
+    
+    return current_news
+
 
 
 def get_xml_feed(url):
@@ -62,6 +90,7 @@ all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zer
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
 #vuln_news = add_rss_data(vuln_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
+vuln_news = add_cve_data(vuln_news)
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 
