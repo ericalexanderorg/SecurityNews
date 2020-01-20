@@ -35,7 +35,10 @@ def add_cve_data(current_news):
 
 
 def get_xml_feed(url):
-    resp = requests.get(url)
+    session = requests.Session()
+    # Avoid getting blocked by Reddit due to the default requests agent string. 
+    session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3945.117 Safari/537.36'})
+    resp = session.get(url)
     return xmltodict.parse(resp.text)
 
 def add_rss_data(current_news, source, url, link_key="link"):
@@ -52,16 +55,15 @@ def add_rss_data(current_news, source, url, link_key="link"):
 
 def add_reddit_data(current_news, source, url):
     feed = get_xml_feed(url)
-    #print(json.dumps(feed))
-    # for entry in feed['rss']['channel']['item']:
-    #     new = {}
-    #     new['Source'] = source
-    #     new['Title'] = item['title']
-    #     new['Date'] = '{}'.format(parse(item['pubDate']))
-    #     #new['Description'] = item['description']
-    #     new['URL'] = item[link_key]
-    #     current_news.append(new)
-    # return current_news
+    for entry in feed['feed']['entry']:
+        new = {}
+        new['Source'] = source
+        new['Title'] = entry['title']
+        new['Date'] = '{}'.format(parse(entry['updated']))
+        #new['Description'] = item['description']
+        new['URL'] = entry['link']['@href']
+        current_news.append(new)
+    return current_news
 
 # Create our lists
 all_news = []
@@ -70,6 +72,7 @@ tool_news = []
 vuln_news = []
 
 # Run through our news feed sources and add to all news
+all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss")
 all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'BleepingComputer', "https://www.bleepingcomputer.com/feed/")
 all_news = add_rss_data(all_news, 'ITPro.', "https://www.itpro.co.uk/security/feed")
@@ -85,14 +88,13 @@ all_news = add_rss_data(all_news, 'Securelist', "https://securelist.com/feed/")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zerodayinitiative.com/blog?format=rss")
-#all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss")
-#all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
-#vuln_news = add_rss_data(vuln_news, 'Twitter: @CVEnew', 'https://rss.app/feeds/Noif7vQPp82HoFpd.xml')
 vuln_news = add_cve_data(vuln_news)
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
+# Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
+all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 
 # Pattern match on potential breach news and add to the breach_news list
 patterns = ['ransomware', 'breach', 'exposed', 'cyber attack', 'hacked', 'hackers', 'skimming', 'magecart']
