@@ -98,7 +98,7 @@ vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://
 all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 
 # Pattern match on potential breach news and add to the breach_news list
-patterns = ['ransomware', 'breach', 'exposed', 'cyber attack', 'hacked', 'hackers', 'skimming', 'magecart']
+patterns = ['ransomware', 'breach', 'exposed', 'attack', 'hacked', 'hackers', 'skimming', 'magecart']
 for item in all_news:
     for pattern in patterns:
         if pattern in item['Title'].lower():
