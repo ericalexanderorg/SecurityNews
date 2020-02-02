@@ -6,6 +6,16 @@ import json
 import os
 import gzip
 
+def sort_uniq(news_list):
+    temp_list = []
+    for news in news_list:
+        if news['Title'] not in temp_list:
+            temp_list.append(news['Title'])
+        else:
+            news_list.remove(news)
+    
+    return news_list
+
 def add_cve_data(current_news):
     # Download gunzipped json file of recent CVEs
     r = requests.get('https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-recent.json.gz')
@@ -27,7 +37,7 @@ def add_cve_data(current_news):
         new['Source'] = 'nist.gov'
         new['Title'] = cve['cve']['description']['description_data'][0]['value']
         new['Date'] = '{}'.format(parse(cve['publishedDate']))
-        new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
+        new['URL'] = 'https://nvd.nist.gov/vuln/detail/{}'.format(cve['cve']['CVE_data_meta']['ID'])
         current_news.append(new)
     
     return current_news
@@ -113,10 +123,10 @@ for item in all_news:
 
 
 out = {
-    'All News': all_news, 
-    'Breach News': breach_news, 
-    'Tool News': tool_news,
-    'Vuln News': vuln_news
+    'All News': sort_uniq(all_news), 
+    'Breach News': sort_uniq(breach_news), 
+    'Tool News': sort_uniq(tool_news),
+    'Vuln News': sort_uniq(vuln_news)
 }
 f = open("../../UI/v1/src/data.json", "w")
 f.write(json.dumps(out))
