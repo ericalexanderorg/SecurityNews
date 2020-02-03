@@ -33,33 +33,34 @@ def add_cve_data(current_news):
 
     # add to dict
     for cve in data['CVE_Items']:
-        new = {}
-        new['Source'] = 'nist.gov'
-        new['Title'] = cve['cve']['description']['description_data'][0]['value']
-        new['Date'] = '{}'.format(parse(cve['publishedDate']))
-        new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
-        new['App'] = '?'
-        
-        # There's no consistency in what the CVE applies to
-        # So we go through some best effort logic to extract
-        # First see if there's a cep23Uri
-        try:
-            cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
-            cpe23uri_components = cpe23uri.split(":")
-            new['App'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
-        except:
-            # No cpe23Uri, moving on
-            description = cve['cve']['description']['description_data'][0]['value']
-            skip_words = ("the", "in", "an", "a")
-            words = description.split(' ')
-            if "An issue was discovered" in description:
-                new['App'] = words[5] + " " + words[6]
-            elif words[0].lower() in skip_words:
-                new['App'] = words[1] + " " + words[2] + " " + words[3] + " " + words[4] + " " + words[5]
-            else:
-                new['App'] = words[0] + " " + words[1] + " " + words[2] + " " + words[3] + " " + words[4]
+        if "** REJECT **" not in cve['cve']['description']['description_data'][0]['value']:
+            new = {}
+            new['Source'] = 'nist.gov'
+            new['Title'] = cve['cve']['description']['description_data'][0]['value']
+            new['Date'] = '{}'.format(parse(cve['publishedDate']))
+            new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
+            new['Impacts'] = '?'
+            
+            # There's no consistency in what the CVE applies to
+            # So we go through some best effort logic to extract
+            # First see if there's a cep23Uri
+            try:
+                cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
+                cpe23uri_components = cpe23uri.split(":")
+                new['Impacts'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
+            except:
+                # No cpe23Uri, moving on
+                description = cve['cve']['description']['description_data'][0]['value']
+                skip_words = ("the", "in", "an", "a")
+                words = description.split(' ')
+                if "An issue was discovered" in description:
+                    new['Impacts'] = words[5] + " " + words[6]
+                elif words[0].lower() in skip_words:
+                    new['Impacts'] = words[1] + " " + words[2] + " " + words[3] + " " + words[4] + " " + words[5]
+                else:
+                    new['Impacts'] = words[0] + " " + words[1] + " " + words[2] + " " + words[3] + " " + words[4]
 
-        current_news.append(new)
+            current_news.append(new)
 
     
     return current_news
