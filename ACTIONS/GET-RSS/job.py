@@ -33,12 +33,14 @@ def add_cve_data(current_news):
 
     # add to dict
     for cve in data['CVE_Items']:
-        new = {}
-        new['Source'] = 'nist.gov'
-        new['Title'] = cve['cve']['description']['description_data'][0]['value']
-        new['Date'] = '{}'.format(parse(cve['publishedDate']))
-        new['URL'] = 'https://nvd.nist.gov/vuln/detail/{}'.format(cve['cve']['CVE_data_meta']['ID'])
-        current_news.append(new)
+        # Bypass any message with "DO NOT USE THIS CANDIDATE NUMBER"
+        if "DO NOT USE THIS CANDIDATE NUMBER" not in cve['cve']['description']['description_data'][0]['value']: 
+            new = {}
+            new['Source'] = 'nist.gov'
+            new['Title'] = cve['cve']['description']['description_data'][0]['value']
+            new['Date'] = '{}'.format(parse(cve['publishedDate']))
+            new['URL'] = 'https://nvd.nist.gov/vuln/detail/{}'.format(cve['cve']['CVE_data_meta']['ID'])
+            current_news.append(new)
     
     return current_news
 
