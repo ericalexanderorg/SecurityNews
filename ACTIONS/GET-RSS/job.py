@@ -113,7 +113,8 @@ vuln_news = []
 
 # Run through our news feed sources and add to all news
 all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss")
-all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
+# 20200221 - Disabling hacker news for now. Something wrong with xml parsing. 
+#all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'BleepingComputer', "https://www.bleepingcomputer.com/feed/")
 all_news = add_rss_data(all_news, 'ITPro.', "https://www.itpro.co.uk/security/feed")
 all_news = add_rss_data(all_news, 'Krebs On Security', "https://krebsonsecurity.com/feed/")
