@@ -82,15 +82,18 @@ def get_xml_feed(url):
     return xmltodict.parse(resp.text)
 
 def add_rss_data(current_news, source, url, link_key="link"):
-    feed = get_xml_feed(url)
-    for item in feed['rss']['channel']['item']:
-        new = {}
-        new['Source'] = source
-        new['Title'] = item['title']
-        new['Date'] = '{}'.format(parse(item['pubDate']))
-        #new['Description'] = item['description']
-        new['URL'] = item[link_key]
-        current_news.append(new)
+    try: 
+        feed = get_xml_feed(url)
+        for item in feed['rss']['channel']['item']:
+            new = {}
+            new['Source'] = source
+            new['Title'] = item['title']
+            new['Date'] = '{}'.format(parse(item['pubDate']))
+            #new['Description'] = item['description']
+            new['URL'] = item[link_key]
+            current_news.append(new)
+    except Exception as e: 
+        print(e)
     return current_news
 
 def add_reddit_data(current_news, source, url):
@@ -112,9 +115,8 @@ tool_news = []
 vuln_news = []
 
 # Run through our news feed sources and add to all news
-all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss")
-# 20200221 - Disabling hacker news for now. Something wrong with xml parsing. 
-#all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
+all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss") 
+all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'BleepingComputer', "https://www.bleepingcomputer.com/feed/")
 all_news = add_rss_data(all_news, 'ITPro.', "https://www.itpro.co.uk/security/feed")
 all_news = add_rss_data(all_news, 'Krebs On Security', "https://krebsonsecurity.com/feed/")
