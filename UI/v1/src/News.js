@@ -2,10 +2,7 @@ import React from 'react';
 import {
     Filter,
     TextInput,
-    NumberInput,
-    DateInput,
     BooleanInput,
-    NullableBooleanInput,
     List,
     Datagrid,
     TextField,

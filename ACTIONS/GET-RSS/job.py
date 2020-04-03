@@ -47,6 +47,13 @@ def add_cve_data(current_news):
                 new['Date'] = '{}'.format(parse(cve['publishedDate']))
                 new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
                 new['Impacts'] = '?'
+                new['HasCVSS'] = False
+                try:
+                    new['CVSS'] = cve['impact']['baseMetricV3']['cvssV3']['baseScore']
+                    new['HasCVSS'] = True
+                except:
+                    # Guess it doesn't have a CVSS V3 base score
+                    pass
                 
                 # There's no consistency in what the CVE applies to
                 # So we go through some best effort logic to extract
@@ -136,8 +143,8 @@ all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zer
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
 vuln_news = add_cve_data(vuln_news)
-vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
-vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
+#vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
+#vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 # Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
 all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 
