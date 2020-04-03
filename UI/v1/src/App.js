@@ -5,6 +5,7 @@ import { NewsList, CveNewsList } from './News'
 import './App.css'
 import data from './data'
 
+
 const dataProvider = fakeDataProvider(data)
 
 const App = () => (  
