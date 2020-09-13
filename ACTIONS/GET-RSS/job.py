@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import requests
 import xmltodict
+import xml.etree.ElementTree
+from xml.dom import minidom
 import datetime
 from dateutil.parser import parse
 import json
@@ -103,14 +105,17 @@ def add_rss_data(current_news, source, url, link_key="link"):
         print(e)
     return current_news
 
-def add_reddit_data(current_news, source, url):
+def add_rss_data_v2(current_news, source, url):
     feed = get_xml_feed(url)
     for entry in feed['feed']['entry']:
         new = {}
         new['Source'] = source
-        new['Title'] = entry['title']
+        if source.startswith('GA'):
+            # Handles Google Alerts RSS title
+            new['Title'] = entry['content']['#text']
+        else:
+            new['Title'] = entry['title']
         new['Date'] = '{}'.format(parse(entry['updated']))
-        #new['Description'] = item['description']
         new['URL'] = entry['link']['@href']
         current_news.append(new)
     return current_news
@@ -124,12 +129,11 @@ vuln_news = []
 # Run through our news feed sources and add to all news
 # Reddit 
 # Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
-all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss") 
-all_news = add_reddit_data(all_news, 'reddit.com/r/devsecops', "https://www.reddit.com/r/devsecops.rss") 
+all_news = add_rss_data_v2(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss") 
 # All news RSS feeds
-all_news = add_rss_data(all_news, 'GA:Security Breach', "https://www.google.com/alerts/feeds/14902217249725225541/1637945407231648777")
-all_news = add_rss_data(all_news, 'GA:Ransomware Attack', "https://www.google.com/alerts/feeds/14902217249725225541/253555712562062329")
-all_news = add_rss_data(all_news, 'GA:MageCart Attack', "https://www.google.com/alerts/feeds/14902217249725225541/2460322655362916407")
+all_news = add_rss_data_v2(all_news, 'GA:Security Breach', "https://www.google.com/alerts/feeds/14902217249725225541/1637945407231648777")
+all_news = add_rss_data_v2(all_news, 'GA:Ransomware Attack', "https://www.google.com/alerts/feeds/14902217249725225541/253555712562062329")
+all_news = add_rss_data_v2(all_news, 'GA:MageCart Attack', "https://www.google.com/alerts/feeds/14902217249725225541/2460322655362916407")
 all_news = add_rss_data(all_news, 'SANS Internet Storm Center', "https://isc.sans.edu/rssfeed.xml")
 all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'BleepingComputer', "https://www.bleepingcomputer.com/feed/")
@@ -137,18 +141,17 @@ all_news = add_rss_data(all_news, 'ITPro.', "https://www.itpro.co.uk/security/fe
 all_news = add_rss_data(all_news, 'Krebs On Security', "https://krebsonsecurity.com/feed/")
 all_news = add_rss_data(all_news, 'Threatpost', "https://threatpost.com/feed/")
 all_news = add_rss_data(all_news, 'Wired', "https://www.wired.com/feed/category/security/latest/rss")
-#all_news = add_rss_data(all_news, 'Security Magazine', "https://www.securitymagazine.com/rss")
+all_news = add_rss_data_v2(all_news, 'reddit.com/r/devsecops', "https://www.reddit.com/r/devsecops.rss") 
 all_news = add_rss_data(all_news, 'SecurityWeek', "https://feeds.feedburner.com/securityweek", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'Security Affairs', "https://securityaffairs.co/wordpress/feed")
 all_news = add_rss_data(all_news, 'Naked Security', "https://nakedsecurity.sophos.com/feed/")
 all_news = add_rss_data(all_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'Securelist', "https://securelist.com/feed/")
-#all_news = add_rss_data(all_news, 'OpenSecurity.global', "https://opensecurity.global/discover/all.xml/")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zerodayinitiative.com/blog?format=rss")
 all_news = add_rss_data(all_news, 'Bitdefender Blog', "http://feeds.feedburner.com/BusinessInsightsInVirtualizationAndCloudSecurity", "feedburner:origLink")
-all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
+all_news = add_rss_data_v2(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
 # Tool specific news
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
