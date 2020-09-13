@@ -122,7 +122,14 @@ tool_news = []
 vuln_news = []
 
 # Run through our news feed sources and add to all news
+# Reddit 
+# Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
 all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss") 
+all_news = add_reddit_data(all_news, 'reddit.com/r/devsecops', "https://www.reddit.com/r/devsecops") 
+# All news RSS feeds
+all_news = add_rss_data(all_news, 'GA:Security Breach', "https://www.google.com/alerts/feeds/14902217249725225541/1637945407231648777")
+all_news = add_rss_data(all_news, 'GA:Ransomware Attack', "https://www.google.com/alerts/feeds/14902217249725225541/253555712562062329")
+all_news = add_rss_data(all_news, 'GA:MageCart Attack', "https://www.google.com/alerts/feeds/14902217249725225541/2460322655362916407")
 all_news = add_rss_data(all_news, 'SANS Internet Storm Center', "https://isc.sans.edu/rssfeed.xml")
 all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
 all_news = add_rss_data(all_news, 'BleepingComputer', "https://www.bleepingcomputer.com/feed/")
@@ -141,13 +148,15 @@ all_news = add_rss_data(all_news, 'Zero Day Initiative - Upcoming', "https://www
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
 all_news = add_rss_data(all_news, 'Zero Day Initiative - Blog', "https://www.zerodayinitiative.com/blog?format=rss")
 all_news = add_rss_data(all_news, 'Bitdefender Blog', "http://feeds.feedburner.com/BusinessInsightsInVirtualizationAndCloudSecurity", "feedburner:origLink")
+all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
+# Tool specific news
 tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
+# Vuln specific news
 vuln_news = add_cve_data(vuln_news)
-#vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Upcoming', "https://www.zerodayinitiative.com/rss/upcoming")
-#vuln_news = add_rss_data(vuln_news, 'Zero Day Initiative - Published', "https://www.zerodayinitiative.com/rss/published")
-# Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
-all_news = add_reddit_data(all_news, 'reddit.com/r/netsec', "https://www.reddit.com/r/netsec.rss")
+
+
+
 
 # Pattern match on potential breach news and add to the breach_news list
 patterns = ['ransomware', 'breach', 'exposed', 'attack', 'hacked', 'hackers', 'skimming', 'magecart']
