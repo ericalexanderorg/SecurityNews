@@ -125,7 +125,7 @@ vuln_news = []
 # Reddit 
 # Note on Reddit requests: They're staggered to avoid hitting their rate limit when we make 2 requests within 6 seconds
 all_news = add_reddit_data(all_news, 'reddit.com/r/InfoSecNews', "https://www.reddit.com/r/InfoSecNews.rss") 
-all_news = add_reddit_data(all_news, 'reddit.com/r/devsecops', "https://www.reddit.com/r/devsecops") 
+all_news = add_reddit_data(all_news, 'reddit.com/r/devsecops', "https://www.reddit.com/r/devsecops.rss") 
 # All news RSS feeds
 all_news = add_rss_data(all_news, 'GA:Security Breach', "https://www.google.com/alerts/feeds/14902217249725225541/1637945407231648777")
 all_news = add_rss_data(all_news, 'GA:Ransomware Attack', "https://www.google.com/alerts/feeds/14902217249725225541/253555712562062329")
