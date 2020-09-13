@@ -8,6 +8,7 @@ from dateutil.parser import parse
 import json
 import os
 import gzip
+import re
 
 def sort_uniq(news_list):
     temp_list = []
@@ -81,7 +82,15 @@ def add_cve_data(current_news):
     
     return current_news
 
-
+def cleanup_title(title):
+    # Remove things like html tags from the title
+    title = title.replace("<b>", "")
+    title = title.replace("</b>", "")
+    title = title.replace("\u201c", "")
+    title = title.replace("\u201d", "")
+    title = title.replace("&#39;", "")
+    title = title.replace("&amp;", "")
+    return title
 
 def get_xml_feed(url):
     session = requests.Session()
@@ -112,7 +121,7 @@ def add_rss_data_v2(current_news, source, url):
         new['Source'] = source
         if source.startswith('GA'):
             # Handles Google Alerts RSS title
-            new['Title'] = entry['content']['#text']
+            new['Title'] = cleanup_title(entry['title']['#text'])
         else:
             new['Title'] = entry['title']
         new['Date'] = '{}'.format(parse(entry['updated']))
@@ -157,8 +166,6 @@ tool_news = add_rss_data(tool_news, 'Rapid7', 'https://blog.rapid7.com/rss/')
 tool_news = add_rss_data(tool_news, 'KitPloit', "https://feeds.feedburner.com/PentestTools", "feedburner:origLink")
 # Vuln specific news
 vuln_news = add_cve_data(vuln_news)
-
-
 
 
 # Pattern match on potential breach news and add to the breach_news list
