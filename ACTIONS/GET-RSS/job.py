@@ -116,17 +116,18 @@ def add_rss_data(current_news, source, url, link_key="link"):
 
 def add_rss_data_v2(current_news, source, url):
     feed = get_xml_feed(url)
-    for entry in feed['feed']['entry']:
-        new = {}
-        new['Source'] = source
-        if source.startswith('GA'):
-            # Handles Google Alerts RSS title
-            new['Title'] = cleanup_title(entry['title']['#text'])
-        else:
-            new['Title'] = entry['title']
-        new['Date'] = '{}'.format(parse(entry['updated']))
-        new['URL'] = entry['link']['@href']
-        current_news.append(new)
+    if 'entry' in feed['feed']:
+        for entry in feed['feed']['entry']:
+            new = {}
+            new['Source'] = source
+            if source.startswith('GA'):
+                # Handles Google Alerts RSS title
+                new['Title'] = cleanup_title(entry['title']['#text'])
+            else:
+                new['Title'] = entry['title']
+            new['Date'] = '{}'.format(parse(entry['updated']))
+            new['URL'] = entry['link']['@href']
+            current_news.append(new)
     return current_news
 
 # Create our lists
