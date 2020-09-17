@@ -118,16 +118,21 @@ def add_rss_data_v2(current_news, source, url):
     feed = get_xml_feed(url)
     if 'entry' in feed['feed']:
         for entry in feed['feed']['entry']:
-            new = {}
-            new['Source'] = source
-            if source.startswith('GA'):
-                # Handles Google Alerts RSS title
-                new['Title'] = cleanup_title(entry['title']['#text'])
-            else:
-                new['Title'] = entry['title']
-            new['Date'] = '{}'.format(parse(entry['updated']))
-            new['URL'] = entry['link']['@href']
-            current_news.append(new)
+            try:
+                new = {}
+                new['Source'] = source
+                if source.startswith('GA'):
+                    # Handles Google Alerts RSS title
+                    new['Title'] = cleanup_title(entry['title']['#text'])
+                else:
+                    new['Title'] = entry['title']
+                new['Date'] = '{}'.format(parse(entry['updated']))
+                new['URL'] = entry['link']['@href']
+                current_news.append(new)
+            except Exception as e: 
+                print('ERROR: Could not parse source {}'.format(source))
+                print(entry)
+                print(e)
     return current_news
 
 # Create our lists
