@@ -149,7 +149,7 @@ all_news = add_rss_data_v2(all_news, 'reddit.com/r/InfoSecNews', "https://www.re
 all_news = add_rss_data_v2(all_news, 'GA:Security Breach', "https://www.google.com/alerts/feeds/14902217249725225541/1637945407231648777")
 all_news = add_rss_data_v2(all_news, 'GA:Ransomware Attack', "https://www.google.com/alerts/feeds/14902217249725225541/253555712562062329")
 all_news = add_rss_data_v2(all_news, 'GA:MageCart Attack', "https://www.google.com/alerts/feeds/14902217249725225541/2460322655362916407")
-all_news = add_rss_data_v2(all_news, 'The DFIR Report', "https://thedfirreport.com/feed/")
+all_news = add_rss_data(all_news, 'The DFIR Report', "https://thedfirreport.com/feed/")
 all_news = add_rss_data_v2(all_news, 'reddit.com/r/blueteamsec', "https://www.reddit.com/r/blueteamsec.rss") 
 all_news = add_rss_data(all_news, 'SANS Internet Storm Center', "https://isc.sans.edu/rssfeed.xml")
 all_news = add_rss_data(all_news, 'The Hacker News', "http://feeds.feedburner.com/TheHackersNews?format=rss", "feedburner:origLink")
