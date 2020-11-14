@@ -51,21 +51,27 @@ def add_cve_data(current_news):
                 new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
                 new['Impacts'] = '?'
                 new['HasCVSS'] = False
-                try:
-                    new['CVSS'] = cve['impact']['baseMetricV3']['cvssV3']['baseScore']
-                    new['HasCVSS'] = True
-                except:
-                    # Guess it doesn't have a CVSS V3 base score
-                    pass
+                if json.dumps(cve).contains("cvssV3"):
+                    try:
+                        new['CVSS'] = cve['impact']['baseMetricV3']['cvssV3']['baseScore']
+                        new['HasCVSS'] = True
+                    except:
+                        # Guess it doesn't have a CVSS V3 base score
+                        pass
                 
                 # There's no consistency in what the CVE applies to
                 # So we go through some best effort logic to extract
                 # First see if there's a cep23Uri
-                try:
-                    cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
-                    cpe23uri_components = cpe23uri.split(":")
-                    new['Impacts'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
-                except:
+                if json.dumps(cve).contains("cpe23Uri"):
+                    try:
+                        cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
+                        cpe23uri_components = cpe23uri.split(":")
+                        new['Impacts'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
+                    except:
+                        # couldn't parse, moving on
+                        pass
+
+                else:
                     # No cpe23Uri, moving on
                     description = cve['cve']['description']['description_data'][0]['value']
                     skip_words = ("the", "in", "an", "a")
