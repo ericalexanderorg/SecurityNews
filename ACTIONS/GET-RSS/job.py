@@ -55,26 +55,27 @@ def add_cve_data(current_news):
                     new['CVSS'] = cve['impact']['baseMetricV3']['cvssV3']['baseScore']
                     new['HasCVSS'] = True
 
-                if 'cpe_match' in cve['configurations']:
-                    if 'cpe_match' in cve['configurations']['nodes'][0]:
-                        if 'cpe23Uri' in cve['configurations']['nodes'][0]['cpe_match'][0]:
-                            cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
-                            cpe23uri_components = cpe23uri.split(":")
-                            new['Impacts'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
-                        else:
-                            description = cve['cve']['description']['description_data'][0]['value']
-                            skip_words = ("the", "in", "an", "a")
-                            words = description.split(' ')
-                            try: 
+                new['Impacts'] = "?"
+                try: 
+                    if 'cpe_match' in cve['configurations']:
+                        if 'cpe_match' in cve['configurations']['nodes'][0]:
+                            if 'cpe23Uri' in cve['configurations']['nodes'][0]['cpe_match'][0]:
+                                cpe23uri = cve['configurations']['nodes'][0]['cpe_match'][0]['cpe23Uri']
+                                cpe23uri_components = cpe23uri.split(":")
+                                new['Impacts'] = cpe23uri_components[4] + " " + cpe23uri_components[5]
+                            else:
+                                description = cve['cve']['description']['description_data'][0]['value']
+                                skip_words = ("the", "in", "an", "a")
+                                words = description.split(' ')
                                 if "An issue was discovered" in description:
                                     new['Impacts'] = words[5] + " " + words[6]
                                 elif words[0].lower() in skip_words:
                                     new['Impacts'] = words[1] + " " + words[2] + " " + words[3] + " " + words[4] + " " + words[5]
                                 else:
                                     new['Impacts'] = words[0] + " " + words[1] + " " + words[2] + " " + words[3] + " " + words[4]
-                            except:
-                                # Couldn't parse
-                                new['Impacts'] = "?"
+                except:
+                    print("Could not determine impact for {}".format(cve['cve']['description']['description_data'][0]['value']))
+                                
 
                 current_news.append(new)
 
