@@ -49,7 +49,6 @@ def add_cve_data(current_news):
                 new['Title'] = cve['cve']['description']['description_data'][0]['value']
                 new['Date'] = '{}'.format(parse(cve['publishedDate']))
                 new['URL'] = 'https://cve.mitre.org/cgi-bin/cvename.cgi?name={}'.format(cve['cve']['CVE_data_meta']['ID'])
-                new['Impacts'] = '?'
                 new['HasCVSS'] = False
                 if "baseScore" in json.dumps(cve):
                     new['CVSS'] = cve['impact']['baseMetricV3']['cvssV3']['baseScore']
