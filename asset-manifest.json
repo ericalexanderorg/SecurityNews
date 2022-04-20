@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/SecurityNews/static/css/main.d1b05096.chunk.css",
+    "main.js": "/SecurityNews/static/js/main.24feabc9.chunk.js",
+    "main.js.map": "/SecurityNews/static/js/main.24feabc9.chunk.js.map",
+    "runtime-main.js": "/SecurityNews/static/js/runtime-main.e0748928.js",
+    "runtime-main.js.map": "/SecurityNews/static/js/runtime-main.e0748928.js.map",
+    "static/js/2.d112d52f.chunk.js": "/SecurityNews/static/js/2.d112d52f.chunk.js",
+    "static/js/2.d112d52f.chunk.js.map": "/SecurityNews/static/js/2.d112d52f.chunk.js.map",
+    "index.html": "/SecurityNews/index.html",
+    "precache-manifest.7052a9b860a72f7d6005cb4f452762f2.js": "/SecurityNews/precache-manifest.7052a9b860a72f7d6005cb4f452762f2.js",
+    "service-worker.js": "/SecurityNews/service-worker.js",
+    "static/css/main.d1b05096.chunk.css.map": "/SecurityNews/static/css/main.d1b05096.chunk.css.map",
+    "static/js/2.d112d52f.chunk.js.LICENSE": "/SecurityNews/static/js/2.d112d52f.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e0748928.js",
+    "static/js/2.d112d52f.chunk.js",
+    "static/css/main.d1b05096.chunk.css",
+    "static/js/main.24feabc9.chunk.js"
+  ]
+}
